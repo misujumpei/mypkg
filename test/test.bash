@@ -14,9 +14,9 @@ source install/setup.bash
 export PYTHONUNBUFFERED=1
 
 
-# talker, listener は10秒経ったら強制終了する
-timeout 10 ros2 run mypkg talker > /tmp/talker.log 2>&1 &  
-timeout 10 ros2 run mypkg listener > /tmp/listener.log 2>&1 &
+# talker, listener は10秒経ったら強制終了する、ROS2の設定を読み込んでから実行するように
+timeout 10 bash -c "source /opt/ros/humble/setup.bash; source install/setup.bash; ros2 run mypkg talker" > /tmp/talker.log 2>&1 &
+timeout 10 bash -c "source /opt/ros/humble/setup.bash; source install/setup.bash; ros2 run mypkg listener" > /tmp/listener.log 2>&1 &
 
 # 通信してメッセージがでるまで5秒待つ
 sleep 5
