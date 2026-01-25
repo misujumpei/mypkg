@@ -13,10 +13,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='jumpei',
+    maintainer='misujumpei',
     maintainer_email='misujumpei@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='A prefecture quiz ',
+    license='BSD-3-Clause',
     extras_require={
         'test': [
             'pytest',
