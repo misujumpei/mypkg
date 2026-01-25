@@ -29,3 +29,13 @@ class Quiz(Node):   #クラスの定義
 
         # 自分の画面にも何を送ったかログを出す
         self.get_logger().info(f'問題：{msg.data}の県庁所在地は？')
+
+def main():
+    rclpy.init()    # 初期化
+    node = Quiz()   # 実体化
+    rclpy.spin(node)  #（Ctrl+C）が入力されるまで継続
+    node.destroy_node()
+    rclpy.shutdown()  # 終了
+
+if __name__ == '__main__':  # talker.pyが直接実行された時だけ関数を動かす
+    main()
