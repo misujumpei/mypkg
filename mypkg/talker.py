@@ -4,7 +4,7 @@
 
 import rclpy                     # ROS 2の基本ライブラリ
 from rclpy.node import Node      # rclpyの中からNodeを取り出す
-from std_msgs.msg import String  # 標準入力から文字列を読み込む
+from std_msgs.msg import String  # 標準的なメッセージの型を読み込む 
 import random                    # 乱数を生成する
 
 
