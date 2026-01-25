@@ -14,3 +14,17 @@ class QuizListener(Node):   # Nodeクラスから受信者を作成
         
         # 書式: create_subscription(型, トピック名, コールバック関数, キューサイズ)
         self.sub = self.create_subscription(String, 'prefecture_topic', self.cb, 10)
+
+    def cb(self, msg):   # 呼び出し、中身を取り出す
+        # メッセージが届いた時に実行される
+        self.get_logger().info(f'受信したクイズ: {msg.data}')
+
+def main():
+    rclpy.init()  
+    node = QuizListener()
+    rclpy.spin(node)　　# データが届くまで待ち続ける
+    node.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
