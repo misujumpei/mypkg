@@ -20,3 +20,12 @@ class Quiz(Node):   #クラスの定義
 
         # タイマーの設定（1.0秒ごとに実行）
         self.timer = self.create_timer(1.0, self.timer_callback)
+
+
+    def timer_callback(self):
+        msg = String()  
+        msg.data = random.choice(self.prefectures)  # リストからランダムに県名を選ぶ
+        self.pub.publish(msg)   # 送信
+
+        # 自分の画面にも何を送ったかログを出す
+        self.get_logger().info(f'問題：{msg.data}の県庁所在地は？')
