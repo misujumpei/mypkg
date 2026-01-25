@@ -22,7 +22,7 @@ class QuizListener(Node):   # Nodeクラスから受信者を作成
 def main():
     rclpy.init()  
     node = QuizListener()
-    rclpy.spin(node)　　# データが届くまで待ち続ける
+    rclpy.spin(node)  # データが届くまで待ち続ける
     node.destroy_node()
     rclpy.shutdown()
 
