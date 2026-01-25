@@ -9,6 +9,11 @@ cd $dir/ros2_ws  # ビルドとセットアップ
 colcon build     #パッケージを作る 
 source install/setup.bash
 
+
+# 出力を溜め込まず、すぐにファイルに書き込む設定
+export PYTHONUNBUFFERED=1
+
+
 # talker, listener は10秒経ったら強制終了する
 timeout 10 ros2 run mypkg talker > /tmp/talker.log 2>&1 &  
 timeout 10 ros2 run mypkg listener > /tmp/listener.log 2>&1 &
@@ -16,5 +21,11 @@ timeout 10 ros2 run mypkg listener > /tmp/listener.log 2>&1 &
 # 通信してメッセージがでるまで5秒待つ
 sleep 5
 
+
+# デバック用にログの中身を表示
+echo "=== Listener Log Content ==="
+cat /tmp/listener.log
+echo "============================"
+
 # listenerに 答え と出たら終了
-cat /tmp/listener.log | grep '答え:'
+grep '答え:' /tmp/listener.log
