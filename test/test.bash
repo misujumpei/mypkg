@@ -2,19 +2,15 @@
 # SPDX-FileCopyrightText: 2026 misujumpei
 # SPDX-License-Identifier: BSD-3-Clause
 
-dir=~
-[ "$1" != "" ] && dir="$1" 
-
-cd $dir/ros2_ws
+cd /root/ros2_ws
 colcon build
-source /opt/ros/humble/setup.bash # 環境読み込み
+source /opt/ros/humble/setup.bash
 source install/setup.bash
+export PYTHONUNBUFFERED=1
 
-# 10秒動かしてログへ代入。&で裏で動かす
-timeout 10 ros2 run mypkg talker > /tmp/mypkg.log 2>&1 &
-timeout 10 ros2 run mypkg listener >> /tmp/mypkg.log 2>&1 &
+timeout 10 bash -c "source /opt/ros/humble/setup.bash; source /root/ros2_ws/install/setup.bash; ros2 run mypkg talker" > log.txt 2>&1 &
+timeout 10 bash -c "source /opt/ros/humble/setup.bash; source /root/ros2_ws/install/setup.bash; ros2 run mypkg listener" >> log.txt 2>&1 &
 
-sleep 5 # 通信を待つ
-
-# 判定
-cat /tmp/mypkg.log | grep '答え'
+sleep 8
+cat log.txt
+grep '答え' log.txt
