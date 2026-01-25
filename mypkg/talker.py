@@ -6,3 +6,17 @@ import rclpy                     # ROS 2の基本ライブラリ
 from rclpy.node import Node      # rclpyの中からNodeを取り出す
 from std_msgs.msg import String  # 標準入力から文字列を読み込む
 import random                    # 乱数を生成する
+
+
+class Quiz(Node):   #クラスの定義
+    def __init__(self):
+        super().__init__('talker') # ノード名を 'talker' に設定
+
+        # トピック名: prefecture_topicでパブリッシャーの作成
+        self.pub = self.create_publisher(String, 'prefecture_topic', 10)
+
+        # クイズのリスト
+        self.prefectures = ["千葉県", "東京都", "神奈川県", "埼玉県", "茨城県", "栃木県", "群馬県"]
+
+        # タイマーの設定（1.0秒ごとに実行）
+        self.timer = self.create_timer(1.0, self.timer_callback)
