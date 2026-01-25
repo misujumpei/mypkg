@@ -2,10 +2,10 @@
 # SPDX-FileCopyrightText: 2026 misujumpei
 # SPDX-License-Identifier: BSD-3-Clause
 
-import rclpy                     # ROS 2の基本ライブラリ
-from rclpy.node import Node      # rclpyの中からNodeを取り出す
-from std_msgs.msg import String  # 標準的なメッセージの型を読み込む 
-import random                    # 乱数を生成する
+import rclpy                      # ROS 2の基本ライブラリ
+from rclpy.node import Node       # rclpyの中からNodeを取り出す
+from std_msgs.msg import String   # 標準的なメッセージの型を読み込む 
+import random                     # 乱数を生成する
 
 
 class Quiz(Node):   #クラスの定義
@@ -15,11 +15,19 @@ class Quiz(Node):   #クラスの定義
         # トピック名: prefecture_topicでパブリッシャーの作成
         self.pub = self.create_publisher(String, 'prefecture_topic', 10)
 
-        # クイズのリスト
-        self.prefectures = ["千葉県", "東京都", "神奈川県", "埼玉県", "茨城県", "栃木県", "群馬県"]
+        # クイズのリスト（47都道府県）
+        self.prefectures = [
+            "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
+            "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
+            "新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県",
+            "静岡県", "愛知県", "三重県", "滋賀県", "京都府", "大阪府", "兵庫県",
+            "奈良県", "和歌山県", "鳥取県", "島根県", "岡山県", "広島県", "山口県",
+            "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県",
+            "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
+        ]
 
-        # タイマーの設定（1.0秒ごとに実行）
-        self.timer = self.create_timer(1.0, self.timer_callback)
+        # タイマーの設定（3.0秒ごとに実行） 
+        self.timer = self.create_timer(3.0, self.timer_callback)
 
 
     def timer_callback(self):
