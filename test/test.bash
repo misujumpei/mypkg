@@ -21,4 +21,10 @@ echo "---  起動テスト (5秒) ---"
 export PYTHONUNBUFFERED=1
 timeout 5 ros2 run mypkg talker > /tmp/test.log 2>&1
 # timeoutは終了時に124というコードを出すので、ここでは中身があるかだけ確認
-[ -s /tmp/test.log ] && echo "Execution OK!"
+[ -s /tmp/test.log ] && echo "Execution OK"
+
+echo "--- 文字のチェック ---"
+# 中身を全部表示
+cat /tmp/test.log
+# 「答え」という文字があるか探して、あれば成功とする
+grep '答え' /tmp/test.log && echo "Final Result: ALL OK"
