@@ -16,3 +16,9 @@ echo "--- プログラムの存在確認 ---"
 source install/setup.bash
 # ファイルがあるか確認して、あればメッセージを出す
 ls install/mypkg/lib/mypkg/talker && echo "Program File OK"
+
+echo "---  起動テスト (5秒) ---"
+export PYTHONUNBUFFERED=1
+timeout 5 ros2 run mypkg talker > /tmp/test.log 2>&1
+# timeoutは終了時に124というコードを出すので、ここでは中身があるかだけ確認
+[ -s /tmp/test.log ] && echo "Execution OK!"
