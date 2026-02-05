@@ -26,5 +26,5 @@ timeout 5 ros2 run mypkg talker > /tmp/test.log 2>&1
 echo "--- 文字のチェック ---"
 # 中身を全部表示
 cat /tmp/test.log
-# 「答え」という文字があるか探して、あれば成功とする
-grep '答え' /tmp/test.log && echo "Final Result: ALL OK"
+# 「問題　」という文字があるか探して、あれば成功とする
+grep '問題' /tmp/test.log && echo "Final Result: ALL OK"
