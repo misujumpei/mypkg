@@ -6,11 +6,21 @@ cd /root/ros2_ws
 colcon build
 source /opt/ros/humble/setup.bash
 source install/setup.bash
+
+# 出力をリアルタイムに出す
 export PYTHONUNBUFFERED=1
 
-timeout 10 bash -c "source /opt/ros/humble/setup.bash; source /root/ros2_ws/install/setup.bash; ros2 run mypkg talker" > log.txt 2>&1 &
-timeout 10 bash -c "source /opt/ros/humble/setup.bash; source /root/ros2_ws/install/setup.bash; ros2 run mypkg listener" >> log.txt 2>&1 &
+# Talkerを起動
+timeout 10 ros2 run mypkg talker > /tmp/mypkg.log 2>&1 &
+# Listenerを起動
+sleep 2
+timeout 10 ros2 run mypkg listener >> /tmp/mypkg.log 2>&1 &
 
-sleep 8
-cat log.txt
-grep '答え' log.txt
+# 通信が完了するまで待つ
+sleep 10
+
+# デバッグ用
+cat /tmp/mypkg.log
+
+# 「答え」という文字が含まれているか
+grep -i '答え' /tmp/mypkg.log || exit 1
