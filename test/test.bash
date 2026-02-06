@@ -33,8 +33,12 @@ sleep 10
 # 両方のファイルが空でないことを確認
 [ -s /tmp/talker.log ] && [ -s /tmp/listener.log ] && echo "Double Execution OK"
 
-echo "--- 文字のチェック ---"
-# 中身を全部表示
-cat /tmp/test.log
-# 「問題　」という文字があるか探して、あれば成功とする
-grep '問題' /tmp/test.log && echo "Final Result: ALL OK"
+echo "--- 2つのログをチェック ---"
+
+echo "--- Talkerの確認 ---"
+cat /tmp/talker.log
+grep '問題' /tmp/talker.log
+
+echo "--- Listenerの確認 ---"
+cat /tmp/listener.log
+grep '受信' /tmp/listener.log && echo "Final Result: ALL OK!"
