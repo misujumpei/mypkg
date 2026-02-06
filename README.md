@@ -1,4 +1,8 @@
 # mypkg
+
+![build_and_test](https://github.com/misujumpei/mypkg/actions/workflows/test.yml/badge.svg)
+
+## 概要
  ロボットシステム学授業用課題2。やり直しました。
  ROS 2を用いて、47都道府県の県庁所在地クイズを出題・回答するパッケージです。
 
