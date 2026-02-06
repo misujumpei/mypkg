@@ -21,12 +21,16 @@ source install/setup.bash
 ### 1. 回答者（Listener）の起動
  まず、回答側のノードを立ち上げて待機させます。
  ```bash
- ros2 run mypkg listener
+ cd ~/ros2_ws
+. install/setup.bash
+ros2 run mypkg listener
  ```
 
 ### 2. 出題者（Talker）の起動
 別のターミナルで、出題側のノードを立ち上げます。
 ```bash
+cd ~/ros2_ws
+. install/setup.bash
 ros2 run mypkg talker
 ```
 
@@ -37,6 +41,12 @@ ros2 run mypkg talker
  [INFO] [1769319534.788449511] [listener]: 受信したクイズ: 北海道 -> 答え: 札幌市
  [INFO] [1769319537.790004609] [listener]: 受信したクイズ: 沖縄県 -> 答え: 那覇市
  ...
+ ```
+## テストの実行
+ 本パッケージには自動テストが含まれています。
+ ```bash
+ colcon test --packages-select mypkg
+ colcon test-result --all --verbose
  ```
 
 ## ノードの仕様
