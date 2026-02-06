@@ -72,11 +72,16 @@ ros2 run mypkg talker
 ## テスト環境
  以下の環境で動作確認を行っています。
 
- Ubuntu 22.04 LTS
+ * Ubuntu 22.04 LTS (実機/ローカル環境)
+ * Ubuntu 22.04 LTS (GitHub Actions/CI環境)
+ * ROS 2 Humble Hawksbill
 
- ROS 2 Humble Hawksbill
+ 本リポジトリには、自動テストスクリプト `test/test.bash` が含まれています。
+ GitHub Actionsにより、コミットごとに以下の項目を自動でテストしています。
 
- Python 3.10
+ 1. パッケージのビルド (colcon build)
+ 2. TalkerとListenerの同時起動と通信確認
+ 3. ログ出力の正当性チェック（grepによる文字列検索）
 
 ## ライセンス
  このソフトウェアパッケージは，3条項BSDライセンスの下，再頒布および使用が許可されます．
