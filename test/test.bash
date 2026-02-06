@@ -17,11 +17,21 @@ source install/setup.bash
 # ファイルがあるか確認して、あればメッセージを出す
 ls install/mypkg/lib/mypkg/talker && echo "Program File OK"
 
-echo "---  起動テスト (5秒) ---"
+echo "--- Step 4: TalkerとListenerの起動テスト ---"
 export PYTHONUNBUFFERED=1
-timeout 5 ros2 run mypkg talker > /tmp/test.log 2>&1
-# timeoutは終了時に124というコードを出すので、ここでは中身があるかだけ確認
-[ -s /tmp/test.log ] && echo "Execution OK"
+
+# Talkerを10秒間動かして、ログに残す
+timeout 10 ros2 run mypkg talker > /tmp/talker.log 2>&1 &
+
+# 2秒待ってから、Listenerも10秒間動かして、別のログに残す
+sleep 2
+timeout 10 ros2 run mypkg listener > /tmp/listener.log 2>&1 &
+
+# 終わるまで10秒待つ
+sleep 10
+
+# 両方のファイルが空でないことを確認
+[ -s /tmp/talker.log ] && [ -s /tmp/listener.log ] && echo "Double Execution OK"
 
 echo "--- 文字のチェック ---"
 # 中身を全部表示
