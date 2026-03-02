@@ -15,7 +15,7 @@ setup(
     zip_safe=True,
     maintainer='misujumpei',
     maintainer_email='misujumpei@gmail.com',
-    description='A prefecture quiz ',
+    description='ROS 2 package for a prefecture-capital quiz',
     license='BSD-3-Clause',
     extras_require={
         'test': [
@@ -24,8 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'talker = mypkg.talker:main',
-            'listener = mypkg.listener:main',
+            'prefecture_publisher = mypkg.talker:main',
+            'city_subscriber = mypkg.listener:main',
         ],
     },
 )
