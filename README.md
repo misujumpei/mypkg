@@ -6,17 +6,16 @@
 
 ## トピック
 * `/prefecture_topic` (型: `std_msgs/msg/String`)
-  * 都道府県名を受け渡す入力用トピックです。
+  * 都道府県名(入力用)
 * `/capital_topic` (型: `std_msgs/msg/String`)
-  * 県庁所在地を受け渡す出力用トピックです。
+  * 県庁所在地(出力用)
 
 ## ノード
 ### 1. `talker`
 `/prefecture_topic` へランダムな都道府県名を3秒ごとにパブリッシュします。
-他のノードの入力データジェネレータとして利用できます。
 
 ### 2. `listener`
-`/prefecture_topic` から都道府県名をサブスクライブし、対応する県庁所在地を `/capital_topic` へパブリッシュします。データの変換フィルターとして機能します。
+`/prefecture_topic` から都道府県名をサブスクライブし、対応する県庁所在地を `/capital_topic` へパブリッシュします。
 
 ## 実行例
 ### `listener` ノード単体の動作確認
