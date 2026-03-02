@@ -5,7 +5,7 @@
 set -e
 
 source /opt/ros/humble/setup.bash
-cd /root/ros2_ws
+cd $(dirname $0)/../..
 colcon build --packages-select mypkg
 source install/setup.bash
 
