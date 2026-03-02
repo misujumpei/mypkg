@@ -1,97 +1,51 @@
 # mypkg
 
-![build_and_test](https://github.com/misujumpei/mypkg/actions/workflows/test.yml/badge.svg)
+[![test](https://github.com/misujumpei/mypkg/actions/workflows/test.yml/badge.svg)](https://github.com/misujumpei/mypkg/actions)
 
-## 概要
- ロボットシステム学授業用課題2。やり直しました。
- ROS 2を用いて、47都道府県の県庁所在地クイズを出題・回答するパッケージです。
+都道府県名から県庁所在地を導き出すROS 2パッケージです。
 
- 出題者（talker）がランダムに都道府県名を送信し、回答者（listener）がそれを受信して県庁所在地を答えます。
+## トピック
+* `/prefecture_topic` (型: `std_msgs/msg/String`)
+  * 都道府県名を受け渡す入力用トピックです。
+* `/capital_topic` (型: `std_msgs/msg/String`)
+  * 県庁所在地を受け渡す出力用トピックです。
 
-## インストールとビルド方法
- ROS 2のワークスペース（`~/ros2_ws/src`）にリポジトリをクローンし、ビルドを行います。
+## ノード
+### 1. `talker`
+`/prefecture_topic` へランダムな都道府県名を3秒ごとにパブリッシュします。
+他のノードの入力データジェネレータとして利用できます。
 
+### 2. `listener`
+`/prefecture_topic` から都道府県名をサブスクライブし、対応する県庁所在地を `/capital_topic` へパブリッシュします。データの変換フィルターとして機能します。
+
+## 実行例
+### `listener` ノード単体の動作確認
+ターミナル1:
 ```bash
-cd ~/ros2_ws/src
-git clone [https://github.com/misujumpei/mypkg.git](https://github.com/misujumpei/mypkg.git)
-cd ~/ros2_ws
-colcon build --symlink-install
-source install/setup.bash
+$ ros2 run mypkg listener
 ```
 
-## 実行方法
- ターミナルを2つ開き、それぞれのノードを実行することで通信を開始します。
-
-### 1. 回答者（Listener）の起動
- まず、回答側のノードを立ち上げて待機させます。
- ```bash
- cd ~/ros2_ws
-. install/setup.bash
-ros2 run mypkg listener
- ```
-
-### 2. 出題者（Talker）の起動
-別のターミナルで、出題側のノードを立ち上げます。
+## ターミナル2 (外部からのデータ入力):
 ```bash
-cd ~/ros2_ws
-. install/setup.bash
-ros2 run mypkg talker
+$ ros2 topic pub --once /prefecture_topic std_msgs/msg/String "{data: '北海道'}"
 ```
 
-## 実行結果の例
- 通信が確立すると、listener側のターミナルに以下のようなログが表示されます。 Talkerからは3秒ごとに新しい問題が出題されます。
- ```bash
- [INFO] [1769319531.805915687] [listener]: 受信したクイズ: 神奈川県 -> 答え: 横浜市
- [INFO] [1769319534.788449511] [listener]: 受信したクイズ: 北海道 -> 答え: 札幌市
- [INFO] [1769319537.790004609] [listener]: 受信したクイズ: 沖縄県 -> 答え: 那覇市
- ...
- ```
-
-### 終了方法
-プログラムを停止するには、それぞれのターミナルで **Ctrl + C** を押してください。
-
-
-## テストの実行
- 本パッケージには自動テストが含まれています。
- ```bash
- colcon test --packages-select mypkg
- colcon test-result --all --verbose
- ```
-
-## ノードの仕様
-### talker (出題者)
-* **トピック名**: `prefecture_topic`
-* **メッセージ型**: `std_msgs/msg/String`
-* **動作**:
-    * 47都道府県のリストからランダムに1つを選択します。
-    * 3.0秒ごとにトピックへ送信します。
-
-### listener (回答者)
-* **トピック名**: `prefecture_topic`
-* **メッセージ型**: `std_msgs/msg/String`
-* **動作**:
-    * メッセージを受信すると、内部の47都道府県リストを参照します。
-    * 対応する県庁所在地をログに出力します。
-
+## ターミナル3 (結果の確認)
+```bash
+$ ros2 topic echo /capital_topic
+data: '札幌市'
+```
 
 ## テスト環境
- 以下の環境で動作確認を行っています。
-
- * Ubuntu 22.04 LTS (実機/ローカル環境)
- * Ubuntu 22.04 LTS (GitHub Actions/CI環境)
- * ROS 2 Humble Hawksbill
-
- 本リポジトリには、自動テストスクリプト `test/test.bash` が含まれています。
- GitHub Actionsにより、コミットごとに以下の項目を自動でテストしています。
-
- 1. パッケージのビルド (colcon build)
- 2. TalkerとListenerの同時起動と通信確認
- 3. ログ出力の正当性チェック（grepによる文字列検索）
+* Ubuntu 22.04 LTS
+* ROS 2 Humble Hawksbill
+```bash
+$ bash test/test.bash
+```
 
 ## ライセンス
- このソフトウェアパッケージは，3条項BSDライセンスの下，再頒布および使用が許可されます．
+* このソフトウェアパッケージは、3条項BSDライセンスの下、再頒布および使用が許可されます。
+* © 2026 misujumpei
 
- © 2026 misujumpei
-
- このパッケージのコードの一部やディレクトリ構成は、千葉工業大学 ロボットシステム学（2025）の講義資料を参考にしています。
+このパッケージのコードの一部やディレクトリ構成は、千葉工業大学 ロボットシステム学（2025）の講義資料を参考にしています。
  * [千葉工業大学 ロボットシステム学（2025）の講義資料](https://github.com/ryuichiueda/slides_marp/tree/master/robosys2025)
