@@ -18,18 +18,23 @@
 `/prefecture_topic` から都道府県名をサブスクライブし、対応する県庁所在地を `/capital_topic` へパブリッシュします。
 
 ## 実行例
+
 ### `listener` ノード単体の動作確認
-ターミナル1:
+**ターミナル1:**
+まず、変換を行う `listener` ノードを起動して待機状態にします。
+
 ```bash
 $ ros2 run mypkg listener
 ```
 
-## ターミナル2 (外部からのデータ入力):
+**ターミナル2 (外部からのデータ入力):**
+
 ```bash
 $ ros2 topic pub --once /prefecture_topic std_msgs/msg/String "{data: '北海道'}"
 ```
 
-## ターミナル3 (結果の確認)
+**ターミナル3 (結果の確認)**
+
 ```bash
 $ ros2 topic echo /capital_topic
 data: '札幌市'
