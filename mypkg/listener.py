@@ -2,19 +2,16 @@
 # SPDX-FileCopyrightText: 2026 misujumpei
 # SPDX-License-Identifier: BSD-3-Clause
 
-import rclpy                     # ROS 2の基本ライブラリ
-from rclpy.node import Node      # rclpyの中からNodeを取り出す
-from std_msgs.msg import String  # 標準的なメッセージの型を読み込む
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
 
-
-class QuizListener(Node):   # Nodeクラスから受信者を作成
+class QuizListener(Node):
     def __init__(self):
-        super().__init__('listener')  # ノード名を 'listener' に設定
-
-        # 書式: create_subscription(型, トピック名, コールバック関数, キューサイズ)
+        super().__init__('listener')
         self.sub = self.create_subscription(String, 'prefecture_topic', self.cb, 10)
+        self.pub = self.create_publisher(String, 'capital_topic', 10)
 
-        # 答え合わせ用のリスト
         self.answers = {
             "北海道": "札幌市", "青森県": "青森市", "岩手県": "盛岡市", "宮城県": "仙台市",
             "秋田県": "秋田市", "山形県": "山形市", "福島県": "福島市", "茨城県": "水戸市",
@@ -30,18 +27,22 @@ class QuizListener(Node):   # Nodeクラスから受信者を作成
             "宮崎県": "宮崎市", "鹿児島県": "鹿児島市", "沖縄県": "那覇市"
         }
 
-    def cb(self, msg):   # 呼び出し、中身を取り出す
-        # メッセージが届いた時に実行される
+    def cb(self, msg):
         prefecture = msg.data
-        capital = self.answers.get(prefecture, "不明")  # リストから答えを探す
+        capital = self.answers.get(prefecture, "不明")
 
-        # 受信したクイズと答えを表示
-        self.get_logger().info(f'受信したクイズ: {prefecture} -> 答え: {capital}')
+        # 変換した県庁所在地を、別のトピックに流す（Publish）
+        out_msg = String()
+        out_msg.data = capital
+        self.pub.publish(out_msg)
+
+        # テスト確認用
+        self.get_logger().info(f'受信: {prefecture} -> 変換・送信: {capital}')
 
 def main():
-    rclpy.init()  
+    rclpy.init()
     node = QuizListener()
-    rclpy.spin(node)  # データが届くまで待ち続ける
+    rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
 
