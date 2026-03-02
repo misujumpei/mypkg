@@ -6,7 +6,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-class QuizListener(Node):
+class Listener(Node):
     def __init__(self):
         super().__init__('listener')
         self.sub = self.create_subscription(String, 'prefecture_topic', self.cb, 10)
@@ -31,17 +31,14 @@ class QuizListener(Node):
         prefecture = msg.data
         capital = self.answers.get(prefecture, "不明")
 
-        # 変換した県庁所在地を、別のトピックに流す（Publish）
         out_msg = String()
         out_msg.data = capital
         self.pub.publish(out_msg)
-
-        # テスト確認用
-        self.get_logger().info(f'受信: {prefecture} -> 変換・送信: {capital}')
+        self.get_logger().info(f'Converted: "{prefecture}" -> "{capital}"')
 
 def main():
     rclpy.init()
-    node = QuizListener()
+    node = Listener()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
