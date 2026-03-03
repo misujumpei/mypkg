@@ -40,6 +40,13 @@ $ ros2 topic echo /resolved_city
 data: '札幌市'
 ```
 
+### 一括起動
+配信ノードと変換ノードの両方を同時に起動できます。
+
+```bash
+$ ros2 launch mypkg mypkg.launch.py
+```
+
 ## テスト環境
 * Ubuntu 22.04 LTS
 * ROS 2 Humble Hawksbill
