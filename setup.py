@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 misujumpei
+# SPDX-License-Identifier: BSD-3-Clause
+
 import os
 from glob import glob
 from setuptools import find_packages, setup
