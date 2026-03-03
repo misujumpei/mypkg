@@ -5,38 +5,38 @@
 都道府県名から県庁所在地を導き出すROS 2パッケージです。
 
 ## トピック
-* `/prefecture_topic` (型: `std_msgs/msg/String`)
+* `/region_data` (型: `std_msgs/msg/String`)
   * 都道府県名(入力用)
-* `/capital_topic` (型: `std_msgs/msg/String`)
+* `/resolved_city` (型: `std_msgs/msg/String`)
   * 県庁所在地(出力用)
 
 ## ノード
-### 1. `talker`
-`/prefecture_topic` へランダムな都道府県名を3秒ごとにパブリッシュします。
+### 1. `region_publisher`
+`/region_data` へランダムな都道府県名を3秒ごとに配信します。
 
-### 2. `listener`
-`/prefecture_topic` から都道府県名をサブスクライブし、対応する県庁所在地を `/capital_topic` へパブリッシュします。
+### 2. `city_resolver`
+`/region_data` から都道府県名を受け取り、対応する県庁所在地を `/resolved_city` へ配信します。
 
 ## 実行例
 
-### `listener` ノード単体の動作確認
+### 変換側の動作確認
 **ターミナル1:**
-まず、変換を行う `listener` ノードを起動して待機状態にします。
+まず、変換を行う `city_resolver` ノードを起動して待機状態にします。
 
 ```bash
-$ ros2 run mypkg listener
+$ ros2 run mypkg city_resolver
 ```
 
-**ターミナル2 (外部からのデータ入力):**
+**ターミナル2 :**
 
 ```bash
-$ ros2 topic pub --once /prefecture_topic std_msgs/msg/String "{data: '北海道'}"
+$ ros2 topic pub --once /region_data std_msgs/msg/String "{data: '北海道'}"
 ```
 
 **ターミナル3 (結果の確認)**
 
 ```bash
-$ ros2 topic echo /capital_topic
+$ ros2 topic echo /resolved_city
 data: '札幌市'
 ```
 
