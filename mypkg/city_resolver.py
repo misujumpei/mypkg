@@ -2,17 +2,18 @@
 # SPDX-FileCopyrightText: 2026 misujumpei
 # SPDX-License-Identifier: BSD-3-Clause
 
+import sys
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-class Listener(Node):
+class CityResolver(Node):
     def __init__(self):
-        super().__init__('listener')
-        self.sub = self.create_subscription(String, 'prefecture_topic', self.cb, 10)
-        self.pub = self.create_publisher(String, 'capital_topic', 10)
+        super().__init__('city_resolver')
+        self.sub = self.create_subscription(String, 'region_data', self.cb, 10)
+        self.pub = self.create_publisher(String, 'resolved_city', 10)
 
-        self.answers = {
+        self.mapping_table = {
             "北海道": "札幌市", "青森県": "青森市", "岩手県": "盛岡市", "宮城県": "仙台市",
             "秋田県": "秋田市", "山形県": "山形市", "福島県": "福島市", "茨城県": "水戸市",
             "栃木県": "宇都宮市", "群馬県": "前橋市", "埼玉県": "さいたま市", "千葉県": "千葉市",
@@ -29,19 +30,29 @@ class Listener(Node):
 
     def cb(self, msg):
         prefecture = msg.data
-        capital = self.answers.get(prefecture, "不明")
+        
+        if prefecture not in self.mapping_table:
+            print(f"Error: Unknown region '{prefecture}'", file=sys.stderr)
+            sys.exit(1)
+
+        capital = self.mapping_table[prefecture]
 
         out_msg = String()
         out_msg.data = capital
         self.pub.publish(out_msg)
-        self.get_logger().info(f'Converted: "{prefecture}" -> "{capital}"')
+        
+        print(capital, flush=True)
 
 def main():
     rclpy.init()
-    node = Listener()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+    node = CityResolver()
+    try:
+        rclpy.spin(node)
+    except SystemExit:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

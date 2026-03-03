@@ -3,7 +3,7 @@
 <package format="3">
   <name>mypkg</name>
   <version>0.0.0</version>
-  <description>ROS 2 package for a prefecture-capital quiz</description>
+  <description>Regional data mapping service</description>
   
   <maintainer email="misujumpei@gmail.com">misujumpei</maintainer>
   

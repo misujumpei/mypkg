@@ -15,7 +15,7 @@ setup(
     zip_safe=True,
     maintainer='misujumpei',
     maintainer_email='misujumpei@gmail.com',
-    description='ROS 2 package for a prefecture-capital quiz',
+    description='Regional data mapping service',
     license='BSD-3-Clause',
     extras_require={
         'test': [
@@ -24,8 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'prefecture_publisher = mypkg.talker:main',
-            'city_subscriber = mypkg.listener:main',
-        ],
+    'region_publisher = mypkg.region_publisher:main',
+    'city_resolver = mypkg.city_resolver:main',
+],
     },
 )

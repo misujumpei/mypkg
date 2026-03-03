@@ -7,10 +7,10 @@ from rclpy.node import Node
 from std_msgs.msg import String
 import random
 
-class Talker(Node):
+class RegionPublisher(Node):
     def __init__(self):
-        super().__init__('talker')
-        self.pub = self.create_publisher(String, 'prefecture_topic', 10)
+        super().__init__('region_publisher')
+        self.pub = self.create_publisher(String, 'region_data', 10)
         self.timer = self.create_timer(3.0, self.timer_callback)
         self.prefectures = [
             "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県", "茨城県",
@@ -25,11 +25,10 @@ class Talker(Node):
         msg = String()
         msg.data = random.choice(self.prefectures)
         self.pub.publish(msg)
-        self.get_logger().info(f'Publishing: "{msg.data}"')
-
+        
 def main():
     rclpy.init()
-    node = Talker()
+    node = RegionPublisher()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
